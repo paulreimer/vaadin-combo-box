@@ -1,10 +1,10 @@
-<link rel="import" href="../../../vaadin-lumo-styles/color.html">
-<link rel="import" href="../../../vaadin-lumo-styles/spacing.html">
-<link rel="import" href="../../../vaadin-lumo-styles/style.html">
+import '@vaadin/vaadin-lumo-styles/color.js';
+import '@vaadin/vaadin-lumo-styles/spacing.js';
+import '@vaadin/vaadin-lumo-styles/style.js';
+import '@vaadin/vaadin-item/theme/lumo/vaadin-item.js';
+const $_documentContainer = document.createElement('template');
 
-<link rel="import" href="../../../vaadin-item/theme/lumo/vaadin-item.html">
-
-<dom-module id="lumo-combo-box-item" theme-for="vaadin-combo-box-item">
+$_documentContainer.innerHTML = `<dom-module id="lumo-combo-box-item" theme-for="vaadin-combo-box-item">
   <template>
     <style include="lumo-item">
       /* TODO partly duplicated from vaadin-list-box styles. Should find a way to make it DRY */
@@ -44,4 +44,6 @@
       }
     </style>
   </template>
-</dom-module>
+</dom-module>`;
+
+document.head.appendChild($_documentContainer.content);

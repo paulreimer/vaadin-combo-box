@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8">
 
-  <script src="../../web-component-tester/browser.js"></script>
-  <script src='../../webcomponentsjs/webcomponents-lite.js'></script>
-  <link rel="import" href="../../test-fixture/test-fixture.html">
-  <link rel="import" href="../../iron-test-helpers/mock-interactions.html">
-  <link rel="import" href="common-imports.html">
-  <script src="common.js"></script>
-  <link rel="import" href="../vaadin-combo-box-light.html">
-  <link rel="import" href="../../iron-input/iron-input.html">
-  <link rel="import" href="../../paper-input/paper-input.html">
-  <link rel="import" href="../../paper-button/paper-button.html">
-  <link rel="import" href="../../polymer/lib/utils/gestures.html">
+  <script src="../../../wct-browser-legacy/browser.js"></script>
+  <script src="../../../@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+  <script type="module" src="../../../@polymer/test-fixture/test-fixture.js"></script>
+  <script type="module" src="../../../@polymer/iron-test-helpers/mock-interactions.js"></script>
+  <script type="module" src="./common-imports.js"></script>
+  <script src="./common.js"></script>
+  <script type="module" src="../vaadin-combo-box-light.js"></script>
+  <script type="module" src="../../../@polymer/iron-input/iron-input.js"></script>
+  <script type="module" src="../../../@polymer/paper-input/paper-input.js"></script>
+  <script type="module" src="../../../@polymer/paper-button/paper-button.js"></script>
+  <script type="module" src="../../../@polymer/polymer/lib/utils/gestures.js"></script>
 </head>
 
 <body>
@@ -39,113 +39,121 @@
     </template>
   </demo-snippet>
 
-  <script>
-    describe('vaadin-combo-box-light', () => {
-      let comboBox, ironInput;
+  <script type="module">
+import '@polymer/test-fixture/test-fixture.js';
+import '@polymer/iron-test-helpers/mock-interactions.js';
+import './common-imports.js';
+import '../vaadin-combo-box-light.js';
+import '@polymer/iron-input/iron-input.js';
+import '@polymer/paper-input/paper-input.js';
+import '@polymer/paper-button/paper-button.js';
+import { resetMouseCanceller } from '@polymer/polymer/lib/utils/gestures.js';
+describe('vaadin-combo-box-light', () => {
+  let comboBox, ironInput;
 
-      beforeEach(() => {
-        comboBox = fixture('combobox-light');
-        comboBox.items = ['foo', 'bar', 'baz'];
-        ironInput = comboBox.querySelector('iron-input');
-      });
+  beforeEach(() => {
+    comboBox = fixture('combobox-light');
+    comboBox.items = ['foo', 'bar', 'baz'];
+    ironInput = comboBox.querySelector('iron-input');
+  });
 
-      describe('using iron-input', () => {
-        it('should find the input element correctly', () => {
-          expect(comboBox.inputElement).to.eql(ironInput);
-        });
-
-        it('should bind the input value correctly', () => {
-          // Empty string by default.
-          expect(comboBox._inputElementValue).to.eql('');
-          expect(ironInput.value).to.eql('');
-
-          comboBox.value = 'foo';
-          expect(comboBox._inputElementValue).to.eql('foo');
-          expect(ironInput.value).to.eql('foo');
-        });
-      });
-
-      it('should prevent default on overlay down', () => {
-        const e = new CustomEvent('mousedown', {bubbles: true});
-        const spy = sinon.spy(e, 'preventDefault');
-        comboBox.$.overlay.$.dropdown.$.overlay.dispatchEvent(e);
-        expect(spy.called).to.be.true;
-      });
-
-      it('should not prevent default on input down', () => {
-        const e = new CustomEvent('mousedown', {bubbles: true});
-        const spy = sinon.spy(e, 'preventDefault');
-        ironInput.dispatchEvent(e);
-        expect(spy.called).to.be.false;
-      });
-
-      describe('toggling', () => {
-        // NOTE(platosha): because we use emulate touch events in these
-        // tests, we need to reset mouseCanceller in Gestures. Otherwise
-        // it might interfere and cancel clicks in totally unrelated tests.
-        afterEach(() => Polymer.Gestures.resetMouseCanceller());
-
-        it('should toggle overlay on input click', () => {
-          ironInput.dispatchEvent(new CustomEvent('click', {bubbles: true}));
-          expect(comboBox.opened).to.be.true;
-        });
-
-        it('should toggle on input click on touch devices', done => {
-          MockInteractions.downAndUp(ironInput, () => {
-            expect(comboBox.opened).to.be.true;
-            done();
-          }, {emulateTouch: true});
-        });
-
-        it('should not clear on input click', () => {
-          comboBox.value = 'foo';
-          ironInput.dispatchEvent(new CustomEvent('click', {bubbles: true}));
-          expect(comboBox.value).to.equal('foo');
-        });
-
-        it('should not clear on input click on touch devices', done => {
-          comboBox.value = 'foo';
-          MockInteractions.downAndUp(ironInput, () => {
-            expect(comboBox.value).to.equal('foo');
-            done();
-          }, {emulateTouch: true});
-        });
-      });
+  describe('using iron-input', () => {
+    it('should find the input element correctly', () => {
+      expect(comboBox.inputElement).to.eql(ironInput);
     });
 
-    describe('vaadin-combo-box-light-paper-input', () => {
-      let comboBox, paperInput;
+    it('should bind the input value correctly', () => {
+      // Empty string by default.
+      expect(comboBox._inputElementValue).to.eql('');
+      expect(ironInput.value).to.eql('');
 
-      beforeEach(() => {
-        comboBox = fixture('combobox-light-paper-input');
-        comboBox.items = ['foo', 'bar', 'baz'];
-      });
+      comboBox.value = 'foo';
+      expect(comboBox._inputElementValue).to.eql('foo');
+      expect(ironInput.value).to.eql('foo');
+    });
+  });
 
-      it('should toggle overlay by clicking toggle element', () => {
-        comboBox._toggleElement.dispatchEvent(new CustomEvent('click', {bubbles: true}));
+  it('should prevent default on overlay down', () => {
+    const e = new CustomEvent('mousedown', {bubbles: true});
+    const spy = sinon.spy(e, 'preventDefault');
+    comboBox.$.overlay.$.dropdown.$.overlay.dispatchEvent(e);
+    expect(spy.called).to.be.true;
+  });
+
+  it('should not prevent default on input down', () => {
+    const e = new CustomEvent('mousedown', {bubbles: true});
+    const spy = sinon.spy(e, 'preventDefault');
+    ironInput.dispatchEvent(e);
+    expect(spy.called).to.be.false;
+  });
+
+  describe('toggling', () => {
+    // NOTE(platosha): because we use emulate touch events in these
+    // tests, we need to reset mouseCanceller in Gestures. Otherwise
+    // it might interfere and cancel clicks in totally unrelated tests.
+    afterEach(() => resetMouseCanceller());
+
+    it('should toggle overlay on input click', () => {
+      ironInput.dispatchEvent(new CustomEvent('click', {bubbles: true}));
+      expect(comboBox.opened).to.be.true;
+    });
+
+    it('should toggle on input click on touch devices', done => {
+      MockInteractions.downAndUp(ironInput, () => {
         expect(comboBox.opened).to.be.true;
-
-        comboBox._toggleElement.dispatchEvent(new CustomEvent('click', {bubbles: true}));
-        expect(comboBox.opened).to.be.false;
-      });
-
-      it('should prevent default on toggle element down', () => {
-        const e = new CustomEvent('click', {bubbles: true});
-        const spy = sinon.spy(e, 'preventDefault');
-        comboBox._toggleElement.dispatchEvent(e);
-        expect(spy.called).to.be.true;
-      });
-
-      it('should validate the paper-input element on checkValidity', () => {
-        const spy = sinon.spy(comboBox.inputElement, 'validate');
-
-        comboBox.required = true;
-        comboBox.value = 'foo';
-        comboBox.checkValidity();
-
-        expect(spy.called).to.be.true;
-      });
+        done();
+      }, {emulateTouch: true});
     });
-  </script>
+
+    it('should not clear on input click', () => {
+      comboBox.value = 'foo';
+      ironInput.dispatchEvent(new CustomEvent('click', {bubbles: true}));
+      expect(comboBox.value).to.equal('foo');
+    });
+
+    it('should not clear on input click on touch devices', done => {
+      comboBox.value = 'foo';
+      MockInteractions.downAndUp(ironInput, () => {
+        expect(comboBox.value).to.equal('foo');
+        done();
+      }, {emulateTouch: true});
+    });
+  });
+});
+
+describe('vaadin-combo-box-light-paper-input', () => {
+  let comboBox, paperInput;
+
+  beforeEach(() => {
+    comboBox = fixture('combobox-light-paper-input');
+    comboBox.items = ['foo', 'bar', 'baz'];
+  });
+
+  it('should toggle overlay by clicking toggle element', () => {
+    comboBox._toggleElement.dispatchEvent(new CustomEvent('click', {bubbles: true}));
+    expect(comboBox.opened).to.be.true;
+
+    comboBox._toggleElement.dispatchEvent(new CustomEvent('click', {bubbles: true}));
+    expect(comboBox.opened).to.be.false;
+  });
+
+  it('should prevent default on toggle element down', () => {
+    const e = new CustomEvent('click', {bubbles: true});
+    const spy = sinon.spy(e, 'preventDefault');
+    comboBox._toggleElement.dispatchEvent(e);
+    expect(spy.called).to.be.true;
+  });
+
+  it('should validate the paper-input element on checkValidity', () => {
+    const spy = sinon.spy(comboBox.inputElement, 'validate');
+
+    comboBox.required = true;
+    comboBox.value = 'foo';
+    comboBox.checkValidity();
+
+    expect(spy.called).to.be.true;
+  });
+});
+</script>
 
 </body>

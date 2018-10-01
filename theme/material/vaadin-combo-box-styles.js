@@ -1,10 +1,10 @@
-<link rel="import" href="../../../vaadin-text-field/theme/material/vaadin-text-field.html">
+import '@vaadin/vaadin-text-field/theme/material/vaadin-text-field.js';
+import '@vaadin/vaadin-material-styles/color.js';
+import '@vaadin/vaadin-material-styles/font-icons.js';
+import '@vaadin/vaadin-material-styles/mixins/field-button.js';
+const $_documentContainer = document.createElement('template');
 
-<link rel="import" href="../../../vaadin-material-styles/color.html">
-<link rel="import" href="../../../vaadin-material-styles/font-icons.html">
-<link rel="import" href="../../../vaadin-material-styles/mixins/field-button.html">
-
-<dom-module id="material-combo-box" theme-for="vaadin-combo-box">
+$_documentContainer.innerHTML = `<dom-module id="material-combo-box" theme-for="vaadin-combo-box">
   <template>
     <style include="material-field-button">
       :host {
@@ -26,4 +26,6 @@
       }
     </style>
   </template>
-</dom-module>
+</dom-module>`;
+
+document.head.appendChild($_documentContainer.content);
