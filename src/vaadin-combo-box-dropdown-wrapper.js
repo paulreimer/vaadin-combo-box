@@ -196,7 +196,11 @@ class ComboBoxDropdownWrapperElement extends (class extends PolymerElement {}) {
   _maxOverlayHeight(targetRect) {
     const margin = 8;
     const minHeight = 116; // Height of two items in combo-box
-    const bottom = Math.min(window.innerHeight, document.body.scrollHeight - document.body.scrollTop);
+    let bottom = Math.min(window.innerHeight, document.body.scrollHeight - document.body.scrollTop);
+
+    if (bottom === 0) {
+      bottom = window.innerHeight;
+    }
 
     if (this.$.dropdown.alignedAbove) {
       return Math.max(targetRect.top - margin + Math.min(document.body.scrollTop, 0), minHeight) + 'px';
